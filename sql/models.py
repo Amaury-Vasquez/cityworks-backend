@@ -40,3 +40,14 @@ class Contratante(Base):
     id_contratante = Column(String(10), primary_key=True, index=True)
     nombre_contratante = Column(String, index=True)
     id_frenteObra = Column(String(10), ForeignKey("supervisora.id_frenteObra"))
+
+
+class Usuario(Base):
+    __tablename__ = "usuario"
+
+    id_usuario = Column(String(10), primary_key=True, index=True)
+    nombre = Column(String, index=True)
+    email = Column(String, index=True)
+    apellido = Column(String, index=True)
+    password = Column(String, index=True)
+    rol = Column(String, index=True)
