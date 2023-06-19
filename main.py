@@ -6,8 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sql.models import Base
 from sql.database import engine, SessionLocal
 from routes.obras import router_obras
-from routes.login import router_login
+from routes.login import login_router
 from routes.register import router_register
+from routes.concept import concept_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,8 +22,9 @@ templates = Jinja2Templates(directory="templates")
 
 
 app.include_router(router_obras)
-app.include_router(router_login)
+app.include_router(login_router)
 app.include_router(router_register)
+app.include_router(concept_router)
 
 
 @app.get("/", response_class=HTMLResponse)

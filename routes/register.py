@@ -5,13 +5,12 @@ from sql.models import Usuario
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from schemas.user import UserRegister
+from modules.hash_strings import hash_id
 
 
 def create_user_id(user: UserRegister):
     pre_hashed = user.email + user.rol + user.nombre
-    hashed = str(hash(pre_hashed))[1:11]
-    print(hashed)
-    return hashed
+    return hash_id(pre_hashed)
 
 
 router_register = APIRouter(prefix="/api/v1/register",

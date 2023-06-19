@@ -3,18 +3,18 @@ from fastapi.responses import JSONResponse
 from sql.database import get_db
 from sql.models import Usuario
 from sqlalchemy.orm import Session
-from sqlalchemy import text
-from schemas.user import UserLogin
+from schemas.user import UserLogin, User
+from schemas.custom import ErrorMessage
 
-router_login = APIRouter(
+login_router = APIRouter(
     prefix="/api/v1/login", tags=["login"], responses={404: {"description": "Not found"}}
 )
 
 
-@router_login.post("/", response_class=JSONResponse, status_code=200)
-def get_user(user_data: UserLogin, response: Response, db: Session = Depends(get_db)):
+@login_router.post("/", response_class=JSONResponse, status_code=200, response_model=UserLogin, responses={200: {"model": User}, 401: {"model": ErrorMessage}, 500: {"model": ErrorMessage}})
+def get_user(user_data: UserLogin, response: Response, db: Session = Depends(get_db)) -> UserLogin:
     try:
-        result = db.query(Usuario).filter(
+        result: UserLogin = db.query(Usuario).filter(
             Usuario.email == user_data.email).first()
         if (result.password == user_data.password):
             return result

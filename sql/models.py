@@ -51,3 +51,15 @@ class Usuario(Base):
     apellido = Column(String, index=True)
     password = Column(String, index=True)
     rol = Column(String, index=True)
+
+
+class Conceptos(Base):
+    __tablename__ = "conceptos"
+
+    clave = Column(String(10), primary_key=True, index=True)
+    nombre = Column(String, index=True)
+    unidad = Column(String, index=True)
+    importe = Column(Integer)
+    precio = Column(Integer)
+    cantidad = Column(Integer)
+    descripcion = Column(String)
