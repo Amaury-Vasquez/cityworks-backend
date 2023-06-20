@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -59,7 +59,7 @@ class Conceptos(Base):
     clave = Column(String(10), primary_key=True, index=True)
     nombre = Column(String, index=True)
     unidad = Column(String, index=True)
-    importe = Column(Integer)
-    precio = Column(Integer)
+    importe = Column(Float)
+    precio = Column(Float)
     cantidad = Column(Integer)
     descripcion = Column(String)

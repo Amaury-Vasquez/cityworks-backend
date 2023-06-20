@@ -11,8 +11,8 @@ login_router = APIRouter(
 )
 
 
-@login_router.post("/", response_class=JSONResponse, status_code=200, response_model=UserLogin, responses={200: {"model": User}, 401: {"model": ErrorMessage}, 500: {"model": ErrorMessage}})
-def get_user(user_data: UserLogin, response: Response, db: Session = Depends(get_db)) -> UserLogin:
+@login_router.post("/", response_class=JSONResponse, status_code=200, responses={200: {"model": User}, 401: {"model": ErrorMessage}, 500: {"model": ErrorMessage}})
+def get_user(user_data: UserLogin, response: Response, db: Session = Depends(get_db)):
     try:
         result: UserLogin = db.query(Usuario).filter(
             Usuario.email == user_data.email).first()

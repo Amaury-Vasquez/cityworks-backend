@@ -12,7 +12,7 @@ concept_router = APIRouter(
 )
 
 
-@concept_router.get("/",  status_code=200, response_class=JSONResponse, responses={201: {"model": List[Concepto]}, 500: {"model": ErrorMessage}})
+@concept_router.get("/",  status_code=200, response_class=JSONResponse, responses={200: {"model": List[Concepto]}, 500: {"model": ErrorMessage}})
 def get_all_concepts(response: Response, db=Depends(get_db)):
     try:
         result = db.query(Conceptos).all()
