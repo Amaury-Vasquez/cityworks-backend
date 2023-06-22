@@ -53,6 +53,7 @@ def create_concept(concept: CreaConcepto, response: Response, db=Depends(get_db)
         db.refresh(db_concept)
         return db_concept
     except Exception as e:
+        print(e)
         response.status_code = 500
         return {
             "message": "Error en el servidor"
@@ -95,6 +96,7 @@ def update_concept(id: str, updated_concept: ModificaConcepto,  response: Respon
             "message": "No se encontro el concepto"
         }
     except Exception as e:
+        print(e)
         response.status_code = 500
         return {
             "message": "Error en el servidor"
