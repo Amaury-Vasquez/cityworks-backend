@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sql.database import get_db
-from sql.models import Obra
+from models.main import Obra
 from sqlalchemy.orm import Session
 from schemas.obra import LeeObra
 

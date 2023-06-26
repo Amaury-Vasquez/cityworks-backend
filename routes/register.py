@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
 from sql.database import get_db
-from sql.models import Usuario
+from models.main import Usuario
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from schemas.user import UserRegister

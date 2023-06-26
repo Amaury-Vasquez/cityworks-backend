@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Response
 from typing import List
 from fastapi.responses import JSONResponse
 from sql.database import get_db
-from sql.models import Conceptos
+from models.main import Conceptos
 from schemas.concepto import Concepto, CreaConcepto, ModificaConcepto
 from schemas.custom import ErrorMessage
 from modules.hash_strings import hash_id
@@ -19,9 +19,7 @@ def get_all_concepts(response: Response, db=Depends(get_db)):
         return result
     except Exception as e:
         response.status_code = 500
-        return {
-            "message": "Error en el servidor"
-        }
+        print(e)
 
 
 @concept_router.get("/{id}", status_code=200, response_class=JSONResponse, responses={200: {"model": Concepto}, 404: {"model": ErrorMessage}, 500: {"model": ErrorMessage}})
