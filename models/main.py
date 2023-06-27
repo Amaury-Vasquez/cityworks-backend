@@ -52,6 +52,6 @@ class ConceptoEnCatalogo(Base):
     catalogo = Column(String, ForeignKey("catalogo_conceptos.id"))
     clave = Column(String, ForeignKey("conceptos.clave"))
     id = Column(Integer, primary_key=True, index=True)
-
+    cantidad = Column(Float)
     # catalogs = relationship("Catalogo", back_populates="catalogo_conceptos")
     # concepts = relationship("Conceptos", back_populates="conceptos")

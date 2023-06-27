@@ -19,3 +19,9 @@ class ConceptosEnCatalogoModel(BaseModel):
     id_catalogo: str = "1154075801"
     clave_concepto: str = "0054679964"
     id: int = 1
+    cantidad: float = 1.0
+
+
+class AgregaConceptoACatalogoModel(BaseModel):
+    clave: str = "0054679964"
+    cantidad: float = 1.0

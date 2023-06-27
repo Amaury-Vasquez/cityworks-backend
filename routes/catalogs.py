@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 from typing import List
 from sql.database import get_db
-from schemas.catalogo import CatalogoModel, CreaCatalogoModel, ConceptosEnCatalogoModel
+from schemas.catalogo import CatalogoModel, CreaCatalogoModel, ConceptosEnCatalogoModel, AgregaConceptoACatalogoModel
 from models.main import Catalogo, ConceptoEnCatalogo, Conceptos
 from schemas.concepto import Concepto
 from modules.hash_strings import hash_id
@@ -66,19 +66,22 @@ def get_all_concepts_from_catalog(id: str, response: Response, db=Depends(get_db
         print(e)
 
 
-@catalog_router.post('/{id}', status_code=201, responses={201: {"model": Concepto}})
-def add_concept_to_catalog(id: str, concept: str, response: Response, db=Depends(get_db)):
+@catalog_router.post('/{id}', status_code=201, responses={201: {"model": Concepto}, 400: {"message": "No hay suficientes materiales en el inventario"}})
+def add_concept_to_catalog(id: str, concept: AgregaConceptoACatalogoModel, response: Response, db=Depends(get_db)):
     try:
         db_catalog = db.query(Catalogo).filter(Catalogo.id == id).first()
         db_concept = db.query(Conceptos).filter(
-            Conceptos.clave == concept).first()
+            Conceptos.clave == concept.clave).first()
         if (db_catalog and db_concept):
-            new_concept = ConceptoEnCatalogo(
-                catalogo=id, clave=concept)
-            db.add(new_concept)
-            db.commit()
-            db.refresh(new_concept)
-            return new_concept
+            if (db_concept.cantidad < concept.cantidad):
+                response.status_code = 400
+            else:
+                new_concept = ConceptoEnCatalogo(
+                    catalogo=id, clave=concept.clave, cantidad=concept.cantidad)
+                db.add(new_concept)
+                db.commit()
+                db.refresh(new_concept)
+                return new_concept
         response.status_code = 404
     except Exception as e:
         print(e)
@@ -95,5 +98,19 @@ def delete_catalog(id: str, response: Response, db=Depends(get_db)):
             return db_catalog
         response.status_code = 404
 
+    except Exception as e:
+        response.status_code = 500
+
+
+@catalog_router.delete("/{id}/{clave}", status_code=204)
+def delete_concept_from_catalog(id: str, clave: str, response: Response, db=Depends(get_db)):
+    try:
+        db_concept = db.query(ConceptoEnCatalogo).filter(
+            ConceptoEnCatalogo.catalogo == id).filter(ConceptoEnCatalogo.clave == clave).first()
+        if db_concept:
+            db.delete(db_concept)
+            db.commit()
+            return db_concept
+        response.status_code = 404
     except Exception as e:
         response.status_code = 500
